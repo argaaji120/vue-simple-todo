@@ -2,7 +2,9 @@
   <li>
     <input type="checkbox" v-bind:checked="task.completed" v-on:change="$emit('complete')" />
 
-    <span v-if="!isEditing" v-bind:class="{ completed: task.completed }">{{ task.name }}</span>
+    <span v-if="!isEditing" v-bind:class="{ completed: task.completed }">
+      {{ task.name }} <small>({{ task.category }})</small>
+    </span>
 
     <!-- Input field for editing the task -->
     <input

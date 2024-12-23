@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <header>
-      <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="75" height="75" />
+      <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="45" height="45" />
       <h1>Todo List</h1>
     </header>
 
@@ -9,9 +9,19 @@
       <!-- Add a new task -->
       <TaskInput v-on:add-task="addTask" />
 
+      <div class="filter-category">
+        <label for="categoryFilter">Filter by Category: </label>
+        <select v-model="categoryFilter" id="categoryFilter">
+          <option value="">All</option>
+          <option>Work</option>
+          <option>Personal</option>
+        </select>
+      </div>
+
+      <!-- Show task list -->
       <TaskList
         v-if="tasks.length"
-        v-bind:tasks="tasks"
+        v-bind:tasks="filteredTask"
         v-on:complete-task="completeTask"
         v-on:edit-task="editTask"
         v-on:delete-task="deleteTask"
@@ -29,14 +39,14 @@ export default {
   data() {
     return {
       tasks: [],
+      categoryFilter: '',
     }
   },
   methods: {
-    addTask(taskName) {
+    addTask(task) {
       this.tasks.push({
+        ...task,
         id: this.tasks.length ? this.tasks[this.tasks.length - 1].id + 1 : 1,
-        name: taskName,
-        completed: false,
       })
     },
     completeTask(taskId) {
@@ -51,6 +61,15 @@ export default {
     },
     deleteTask(taskId) {
       this.tasks = this.tasks.filter((task) => task.id !== taskId)
+    },
+  },
+  computed: {
+    filteredTask() {
+      if (this.categoryFilter) {
+        return this.tasks.filter((task) => task.category === this.categoryFilter)
+      }
+
+      return this.tasks
     },
   },
   mounted() {
@@ -86,6 +105,10 @@ header {
 .logo {
   display: block;
   margin: 0 auto 2rem;
+}
+
+.filter-category {
+  margin-top: 10px;
 }
 
 @media (min-width: 1024px) {

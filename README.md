@@ -1,6 +1,6 @@
-# gpt-todo
+# vue-simple-todo
 
-This template should help get you started developing with Vue 3 in Vite.
+This Todo List App is a simple task management tool built as a learning exercise to practice Vue.js.
 
 ## Recommended IDE Setup
 

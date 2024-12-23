@@ -1,7 +1,17 @@
 <template>
   <div>
-    <input v-model="newTask" @keyup.enter="submitTask" placeholder="Add a new task" />
+    <input v-model="name" @keyup.enter="submitTask" placeholder="Add a new task" />
+
+    <select v-model="category">
+      <option disabled value="">Select Category</option>
+      <option>Work</option>
+      <option>Personal</option>
+    </select>
+
     <button @click="submitTask">Add Task</button>
+
+    <br />
+    <small v-if="inputError" class="error-message">Please fill out all fields</small>
   </div>
 </template>
 
@@ -9,16 +19,41 @@
 export default {
   data() {
     return {
-      newTask: '',
+      name: '',
+      category: '',
+      inputError: false,
     }
   },
   methods: {
     submitTask() {
-      if (this.newTask.trim()) {
-        this.$emit('addTask', this.newTask)
-        this.newTask = ''
+      if (this.name.trim() && this.category) {
+        this.$emit('addTask', {
+          name: this.name,
+          completed: false,
+          category: this.category,
+        })
+
+        this.name = ''
+        this.category = ''
+        this.inputError = false
+      } else {
+        this.inputError = true
       }
     },
   },
 }
 </script>
+
+<style scoped>
+input {
+  margin-right: 7px;
+}
+
+select {
+  margin-right: 7px;
+}
+
+.error-message {
+  color: red;
+}
+</style>
