@@ -2,18 +2,12 @@
   <li>
     <input type="checkbox" v-bind:checked="task.completed" v-on:change="$emit('complete')" />
 
-    <span v-if="!isEditing" v-bind:class="{ completed: task.completed }">
-      {{ task.name }} <small>({{ task.category }})</small>
+    <span v-if="!isEditing" v-bind:class="{ completed: task.completed, overdue: isOverdue }">
+      {{ task.name }} <small>({{ task.category }})</small> - <small>Due: {{ task.dueDate }}</small>
     </span>
 
     <!-- Input field for editing the task -->
-    <input
-      v-if="isEditing"
-      ref="editInput"
-      v-model="editName"
-      v-on:keyup.enter="saveEdit"
-      v-on:blur="saveEdit"
-    />
+    <input v-if="isEditing" ref="editInput" v-model="editName" v-on:keyup.enter="saveEdit" />
 
     <!-- Edit and Delete Buttons -->
     <button v-on:click="toggleEdit">{{ isEditing ? 'Save' : 'Edit' }}</button>
@@ -23,6 +17,7 @@
 
 <script>
 import { nextTick } from 'vue'
+
 export default {
   props: ['task'],
   data() {
@@ -45,11 +40,16 @@ export default {
       }
     },
     saveEdit() {
-      if (this.editName.trim() !== this.task.name) {
+      if (this.editName.trim() && this.editName.trim() !== this.task.name) {
         this.$emit('edit', { id: this.task.id, editedName: this.editName })
       }
 
       this.isEditing = false
+    },
+  },
+  computed: {
+    isOverdue() {
+      return new Date(this.task.dueDate) < new Date() && !this.task.completed
     },
   },
 }
@@ -77,5 +77,10 @@ button {
   text-decoration: line-through;
   font-style: italic;
   color: gray;
+}
+
+.overdue {
+  color: red;
+  font-weight: bold;
 }
 </style>

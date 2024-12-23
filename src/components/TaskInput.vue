@@ -8,6 +8,8 @@
       <option>Personal</option>
     </select>
 
+    <input v-model="dueDate" type="date" />
+
     <button @click="submitTask">Add Task</button>
 
     <br />
@@ -21,6 +23,7 @@ export default {
     return {
       name: '',
       category: '',
+      dueDate: '',
       inputError: false,
     }
   },
@@ -31,10 +34,12 @@ export default {
           name: this.name,
           completed: false,
           category: this.category,
+          dueDate: this.dueDate,
         })
 
         this.name = ''
         this.category = ''
+        this.dueDate = ''
         this.inputError = false
       } else {
         this.inputError = true
