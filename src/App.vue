@@ -18,10 +18,18 @@
         </select>
       </div>
 
+      <div class="sort-order">
+        <label for="sortOrder">Sort by Due Date: </label>
+        <select v-model="sortOrder" id="sortOrder">
+          <option value="asc">Ascending</option>
+          <option value="desc">Descending</option>
+        </select>
+      </div>
+
       <!-- Show task list -->
       <TaskList
         v-if="tasks.length"
-        v-bind:tasks="filteredTask"
+        v-bind:tasks="sortedTasks"
         v-on:complete-task="completeTask"
         v-on:edit-task="editTask"
         v-on:delete-task="deleteTask"
@@ -40,6 +48,7 @@ export default {
     return {
       tasks: [],
       categoryFilter: '',
+      sortOrder: 'asc',
     }
   },
   methods: {
@@ -62,14 +71,25 @@ export default {
     deleteTask(taskId) {
       this.tasks = this.tasks.filter((task) => task.id !== taskId)
     },
-  },
-  computed: {
     filteredTask() {
+      let filtered = this.tasks
+
       if (this.categoryFilter) {
-        return this.tasks.filter((task) => task.category === this.categoryFilter)
+        filtered = this.tasks.filter((task) => task.category === this.categoryFilter)
       }
 
-      return this.tasks
+      return filtered
+    },
+  },
+  computed: {
+    sortedTasks() {
+      const tasksToSort = this.filteredTask()
+
+      return tasksToSort.sort((a, b) => {
+        const dateA = new Date(a.dueDate)
+        const dateB = new Date(b.dueDate)
+        return this.sortOrder === 'asc' ? dateA - dateB : dateB - dateA
+      })
     },
   },
   mounted() {
@@ -109,6 +129,10 @@ header {
 
 .filter-category {
   margin-top: 10px;
+}
+
+.sort-order {
+  margin-top: 5px;
 }
 
 @media (min-width: 1024px) {

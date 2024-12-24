@@ -3,14 +3,18 @@
     <input type="checkbox" v-bind:checked="task.completed" v-on:change="$emit('complete')" />
 
     <span v-if="!isEditing" v-bind:class="{ completed: task.completed, overdue: isOverdue }">
-      {{ task.name }} <small>({{ task.category }})</small> - <small>Due: {{ task.dueDate }}</small>
+      {{ task.name }}
+      <small>({{ task.category }})</small>
+      <small v-if="task.dueDate"> - Due: {{ task.dueDate }}</small>
     </span>
 
     <!-- Input field for editing the task -->
     <input v-if="isEditing" ref="editInput" v-model="editName" v-on:keyup.enter="saveEdit" />
 
     <!-- Edit and Delete Buttons -->
-    <button v-on:click="toggleEdit">{{ isEditing ? 'Save' : 'Edit' }}</button>
+    <button v-if="!task.completed" v-on:click="toggleEdit">
+      {{ isEditing ? 'Save' : 'Edit' }}
+    </button>
     <button v-if="!isEditing" v-on:click="$emit('delete')">Delete</button>
   </li>
 </template>
