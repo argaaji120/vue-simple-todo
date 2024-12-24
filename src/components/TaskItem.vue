@@ -2,7 +2,14 @@
   <li>
     <input type="checkbox" v-bind:checked="task.completed" v-on:change="$emit('complete')" />
 
-    <span v-if="!isEditing" v-bind:class="{ completed: task.completed, overdue: isOverdue }">
+    <span
+      v-if="!isEditing"
+      v-bind:class="{
+        completed: task.completed,
+        overdue: isOverdue,
+        'due-soon': isDueSoon && !task.completed,
+      }"
+    >
       {{ task.name }}
       <small>({{ task.category }})</small>
       <small v-if="task.dueDate"> - Due: {{ task.dueDate }}</small>
@@ -16,6 +23,11 @@
       {{ isEditing ? 'Save' : 'Edit' }}
     </button>
     <button v-if="!isEditing" v-on:click="$emit('delete')">Delete</button>
+
+    <!-- Notification for tasks due soon -->
+    <small v-if="isDueSoon && !task.completed" class="due-soon-notification">
+      This task is due soon!
+    </small>
   </li>
 </template>
 
@@ -55,6 +67,14 @@ export default {
     isOverdue() {
       return new Date(this.task.dueDate) < new Date() && !this.task.completed
     },
+    isDueSoon() {
+      const dueDate = new Date(this.task.dueDate)
+      const now = new Date()
+      const timeDifference = dueDate - now
+      const oneDayInMillis = 24 * 60 * 60 * 1000
+
+      return timeDifference <= oneDayInMillis && timeDifference > 0
+    },
   },
 }
 </script>
@@ -86,5 +106,15 @@ button {
 .overdue {
   color: red;
   font-weight: bold;
+}
+
+.due-soon {
+  color: orange;
+}
+
+.due-soon-notification {
+  color: red;
+  font-size: 12px;
+  margin-left: 5px;
 }
 </style>
