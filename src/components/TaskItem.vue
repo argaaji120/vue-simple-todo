@@ -13,6 +13,7 @@
       {{ task.name }}
       <small>({{ task.category }})</small>
       <small v-if="task.dueDate"> - Due: {{ task.dueDate }}</small>
+      <small v-if="task.priority" class="priority">{{ task.priority }}</small>
     </span>
 
     <!-- Input field for editing the task -->
@@ -116,5 +117,11 @@ button {
   color: red;
   font-size: 12px;
   margin-left: 5px;
+}
+
+.priority {
+  font-weight: bold;
+  color: blue;
+  margin-left: 10px;
 }
 </style>

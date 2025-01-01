@@ -10,6 +10,12 @@
 
     <input v-model="dueDate" type="date" />
 
+    <select v-model="priority">
+      <option value="High">High</option>
+      <option value="Medium">Medium</option>
+      <option value="Low">Low</option>
+    </select>
+
     <button @click="submitTask">Add Task</button>
 
     <br />
@@ -24,22 +30,25 @@ export default {
       name: '',
       category: '',
       dueDate: '',
+      priority: 'Medium',
       inputError: false,
     }
   },
   methods: {
     submitTask() {
-      if (this.name.trim() && this.category) {
+      if (this.name.trim() && this.category && this.dueDate) {
         this.$emit('addTask', {
           name: this.name,
           completed: false,
           category: this.category,
           dueDate: this.dueDate,
+          priority: this.priority,
         })
 
         this.name = ''
         this.category = ''
         this.dueDate = ''
+        this.priority = 'Medium'
         this.inputError = false
       } else {
         this.inputError = true
