@@ -9,12 +9,24 @@
       <!-- Add a new task -->
       <TaskInput v-on:add-task="addTask" />
 
+      <!-- Filter by Category -->
       <div class="filter-category">
         <label for="categoryFilter">Filter by Category: </label>
         <select v-model="categoryFilter" id="categoryFilter">
           <option value="">All</option>
           <option>Work</option>
           <option>Personal</option>
+        </select>
+      </div>
+
+      <!-- Filter by Priority -->
+      <div>
+        <label for="priorityFilter">Filter by Priority: </label>
+        <select v-model="priorityFilter" id="priorityFilter">
+          <option value="">All</option>
+          <option>High</option>
+          <option>Medium</option>
+          <option>Low</option>
         </select>
       </div>
 
@@ -48,6 +60,7 @@ export default {
     return {
       tasks: [],
       categoryFilter: '',
+      priorityFilter: '',
       sortOrder: 'asc',
     }
   },
@@ -76,6 +89,16 @@ export default {
 
       if (this.categoryFilter) {
         filtered = this.tasks.filter((task) => task.category === this.categoryFilter)
+      }
+
+      if (this.priorityFilter) {
+        filtered = this.tasks.filter((task) => task.priority === this.priorityFilter)
+      }
+
+      if (this.categoryFilter && this.priorityFilter) {
+        filtered = this.tasks.filter(
+          (task) => task.category === this.categoryFilter && task.priority === this.priorityFilter,
+        )
       }
 
       return filtered
