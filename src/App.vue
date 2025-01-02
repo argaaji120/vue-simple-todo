@@ -30,6 +30,7 @@
         </select>
       </div>
 
+      <!-- Sort by Due Date -->
       <div class="sort-order">
         <label for="sortOrder">Sort by Due Date: </label>
         <select v-model="sortOrder" id="sortOrder">
@@ -46,6 +47,14 @@
         v-on:edit-task="editTask"
         v-on:delete-task="deleteTask"
       />
+
+      <!-- Task Editing Modal -->
+      <TaskEdit
+        v-if="editingTask"
+        v-bind:task="editingTask"
+        v-on:edited-task="updateTask"
+        v-on:cancel-editing="cancelEdit"
+      />
     </main>
   </div>
 </template>
@@ -53,12 +62,14 @@
 <script>
 import TaskInput from './components/TaskInput.vue'
 import TaskList from './components/TaskList.vue'
+import TaskEdit from './components/TaskEdit.vue'
 
 export default {
-  components: { TaskInput, TaskList },
+  components: { TaskInput, TaskList, TaskEdit },
   data() {
     return {
       tasks: [],
+      editingTask: null,
       categoryFilter: '',
       priorityFilter: '',
       sortOrder: 'asc',
@@ -81,10 +92,9 @@ export default {
         task.id === taskId ? { ...task, completed: !task.completed } : task,
       )
     },
-    editTask(editedTask) {
-      this.tasks = this.tasks.map((task) =>
-        task.id === editedTask.id ? { ...task, name: editedTask.editedName } : task,
-      )
+    updateTask(editedTask) {
+      this.tasks = this.tasks.map((task) => (task.id === editedTask.id ? { ...editedTask } : task))
+      this.editingTask = null
     },
     deleteTask(taskId) {
       this.tasks = this.tasks.filter((task) => task.id !== taskId)
@@ -107,6 +117,12 @@ export default {
       }
 
       return filtered
+    },
+    editTask(task) {
+      this.editingTask = { ...task }
+    },
+    cancelEdit() {
+      this.editingTask = null
     },
   },
   computed: {

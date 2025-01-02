@@ -16,14 +16,9 @@
       <small v-if="task.priority" class="priority">{{ task.priority }}</small>
     </span>
 
-    <!-- Input field for editing the task -->
-    <input v-if="isEditing" ref="editInput" v-model="editName" v-on:keyup.enter="saveEdit" />
-
     <!-- Edit and Delete Buttons -->
-    <button v-if="!task.completed" v-on:click="toggleEdit">
-      {{ isEditing ? 'Save' : 'Edit' }}
-    </button>
-    <button v-if="!isEditing" v-on:click="$emit('delete')">Delete</button>
+    <button v-if="!task.completed" v-on:click="editTask">Edit</button>
+    <button v-on:click="$emit('delete')">Delete</button>
 
     <!-- Notification for tasks due soon -->
     <small v-if="isDueSoon && !task.completed" class="due-soon-notification">
@@ -33,8 +28,6 @@
 </template>
 
 <script>
-import { nextTick } from 'vue'
-
 export default {
   props: ['task'],
   data() {
@@ -44,24 +37,8 @@ export default {
     }
   },
   methods: {
-    toggleEdit() {
-      if (this.isEditing) {
-        this.saveEdit()
-      } else {
-        this.isEditing = true
-
-        nextTick(() => {
-          const editInput = this.$refs.editInput
-          editInput.focus()
-        })
-      }
-    },
-    saveEdit() {
-      if (this.editName.trim() && this.editName.trim() !== this.task.name) {
-        this.$emit('edit', { id: this.task.id, editedName: this.editName })
-      }
-
-      this.isEditing = false
+    editTask() {
+      this.$emit('edit', this.task)
     },
   },
   computed: {
