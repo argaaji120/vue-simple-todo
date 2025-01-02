@@ -66,10 +66,15 @@ export default {
   },
   methods: {
     addTask(task) {
-      this.tasks.push({
-        ...task,
-        id: this.tasks.length ? this.tasks[this.tasks.length - 1].id + 1 : 1,
-      })
+      let max = { id: 0 }
+
+      if (this.tasks.length) {
+        max = this.tasks.reduce((prev, current) => {
+          return prev && prev.id > current.id ? prev : current
+        })
+      }
+
+      this.tasks.push({ id: max.id + 1, ...task })
     },
     completeTask(taskId) {
       this.tasks = this.tasks.map((task) =>
@@ -132,8 +137,6 @@ export default {
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
-
 #app {
   margin-left: 32px;
   font-family: 'Poppins', serif;
