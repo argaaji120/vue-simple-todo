@@ -1,61 +1,71 @@
 <template>
   <div id="app">
-    <header>
-      <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="45" height="45" />
-      <h1>Todo List</h1>
-    </header>
+    <div class="container">
+      <nav class="navbar border-bottom mb-3">
+        <a class="navbar-brand" href="javascript:void(0)">
+          <img
+            src="./assets/logo.svg"
+            alt="Vue Logo"
+            width="45"
+            height="45"
+            class="img-fluid d-inline-block align-text-bottom mx-auto"
+          />
+          <span class="h1"> Todo List</span>
+        </a>
+      </nav>
 
-    <main>
-      <!-- Add a new task -->
-      <TaskInput v-on:add-task="addTask" />
+      <main>
+        <!-- Add a new task -->
+        <TaskInput v-on:add-task="addTask" />
 
-      <!-- Filter by Category -->
-      <div class="filter-category">
-        <label for="categoryFilter">Filter by Category: </label>
-        <select v-model="categoryFilter" id="categoryFilter">
-          <option value="">All</option>
-          <option>Work</option>
-          <option>Personal</option>
-        </select>
-      </div>
+        <!-- Filter by Category -->
+        <div class="filter-category mt-3 mb-2">
+          <label for="categoryFilter">Filter by Category: </label>
+          <select v-model="categoryFilter" id="categoryFilter">
+            <option value="">All</option>
+            <option>Work</option>
+            <option>Personal</option>
+          </select>
+        </div>
 
-      <!-- Filter by Priority -->
-      <div>
-        <label for="priorityFilter">Filter by Priority: </label>
-        <select v-model="priorityFilter" id="priorityFilter">
-          <option value="">All</option>
-          <option>High</option>
-          <option>Medium</option>
-          <option>Low</option>
-        </select>
-      </div>
+        <!-- Filter by Priority -->
+        <div class="mb-2">
+          <label for="priorityFilter">Filter by Priority: </label>
+          <select v-model="priorityFilter" id="priorityFilter">
+            <option value="">All</option>
+            <option>High</option>
+            <option>Medium</option>
+            <option>Low</option>
+          </select>
+        </div>
 
-      <!-- Sort by Due Date -->
-      <div class="sort-order">
-        <label for="sortOrder">Sort by Due Date: </label>
-        <select v-model="sortOrder" id="sortOrder">
-          <option value="asc">Ascending</option>
-          <option value="desc">Descending</option>
-        </select>
-      </div>
+        <!-- Sort by Due Date -->
+        <div class="sort-order mb-3">
+          <label for="sortOrder">Sort by Due Date: </label>
+          <select v-model="sortOrder" id="sortOrder">
+            <option value="asc">Ascending</option>
+            <option value="desc">Descending</option>
+          </select>
+        </div>
 
-      <!-- Show task list -->
-      <TaskList
-        v-if="tasks.length"
-        v-bind:tasks="sortedTasks"
-        v-on:complete-task="completeTask"
-        v-on:edit-task="editTask"
-        v-on:delete-task="deleteTask"
-      />
+        <!-- Show task list -->
+        <TaskList
+          v-if="tasks.length"
+          v-bind:tasks="sortedTasks"
+          v-on:complete-task="completeTask"
+          v-on:edit-task="editTask"
+          v-on:delete-task="deleteTask"
+        />
 
-      <!-- Task Editing Modal -->
-      <TaskEdit
-        v-if="editingTask"
-        v-bind:task="editingTask"
-        v-on:edited-task="updateTask"
-        v-on:cancel-editing="cancelEdit"
-      />
-    </main>
+        <!-- Task Editing Modal -->
+        <TaskEdit
+          v-if="editingTask"
+          v-bind:task="editingTask"
+          v-on:edited-task="updateTask"
+          v-on:cancel-editing="cancelEdit"
+        />
+      </main>
+    </div>
   </div>
 </template>
 
@@ -153,45 +163,5 @@ export default {
 </script>
 
 <style scoped>
-#app {
-  margin-left: 32px;
-  font-family: 'Poppins', serif;
-  font-weight: 400;
-  font-style: normal;
-}
-
-header {
-  line-height: 1.5;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-.filter-category {
-  margin-top: 10px;
-}
-
-.sort-order {
-  margin-top: 5px;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 1rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-}
+/*  */
 </style>

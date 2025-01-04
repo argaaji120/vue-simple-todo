@@ -1,25 +1,32 @@
 <template>
-  <div>
-    <input v-model="name" @keyup.enter="submitTask" placeholder="Add a new task" />
+  <div class="row g-3">
+    <div class="col-5">
+      <input class="form-control" type="text" placeholder="Add a new Task" v-model="name" />
+    </div>
 
-    <select v-model="category">
-      <option disabled value="">Select Category</option>
-      <option>Work</option>
-      <option>Personal</option>
-    </select>
+    <div class="col">
+      <select class="form-select" v-model="category">
+        <option disabled value="">Select Category</option>
+        <option>Work</option>
+        <option>Personal</option>
+      </select>
+    </div>
 
-    <input v-model="dueDate" type="date" />
+    <div class="col">
+      <input class="form-control" type="date" v-model="dueDate" />
+    </div>
 
-    <select v-model="priority">
-      <option value="High">High</option>
-      <option value="Medium">Medium</option>
-      <option value="Low">Low</option>
-    </select>
+    <div class="col">
+      <select class="form-select" v-model="priority">
+        <option value="High">High</option>
+        <option value="Medium">Medium</option>
+        <option value="Low">Low</option>
+      </select>
+    </div>
 
-    <button @click="submitTask">Add Task</button>
-
-    <br />
-    <small v-if="inputError" class="error-message">Please fill out all fields</small>
+    <div class="col">
+      <button class="btn btn-success" v-on:click="submitTask">Add Task</button>
+    </div>
   </div>
 </template>
 
