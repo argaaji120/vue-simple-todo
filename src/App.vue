@@ -12,14 +12,14 @@
           />
           <span class="h1"> Todo List</span>
         </a>
+
+        <!-- Add a new task -->
+        <TaskInput v-on:add-task="addTask" />
       </nav>
 
       <main>
-        <!-- Add a new task -->
-        <TaskInput v-on:add-task="addTask" />
-
         <!-- Filter by Category -->
-        <div class="filter-category mt-3 mb-2">
+        <div class="filter-category mb-2">
           <label for="categoryFilter">Filter by Category: </label>
           <select v-model="categoryFilter" id="categoryFilter">
             <option value="">All</option>
