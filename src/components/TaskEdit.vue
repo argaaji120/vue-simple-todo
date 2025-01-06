@@ -1,81 +1,93 @@
 <template>
-  <div class="overlay-modal"></div>
+  <MyModal ref="modal" modal-id="editTaskModal" title="Edit Task" v-on:close="hideModal">
+    <template #body>
+      <div v-if="inputError" class="text-danger mb-3">* Please fill out all fields.</div>
 
-  <div class="modal">
-    <h2>Edit Task</h2>
-    <input v-model="editingTask.name" placeholder="Task name" />
+      <div class="mb-3">
+        <label for="editTask" class="form-label">Task</label>
+        <input
+          class="form-control"
+          type="text"
+          id="editTask"
+          placeholder="Task"
+          v-model="editingTask.name"
+        />
+      </div>
 
-    <select v-model="editingTask.category">
-      <option>Work</option>
-      <option>Personal</option>
-    </select>
+      <div class="mb-3">
+        <label for="editCategory">Category</label>
+        <select class="form-select" id="editCategory" v-model="editingTask.category">
+          <option disabled value="">Select Category</option>
+          <option>Work</option>
+          <option>Personal</option>
+        </select>
+      </div>
 
-    <input v-model="editingTask.dueDate" type="date" />
+      <div class="mb-3">
+        <label for="editDueDate">Due Date</label>
+        <input class="form-control" type="date" id="editDueDate" v-model="editingTask.dueDate" />
+      </div>
 
-    <select v-model="editingTask.priority">
-      <option value="High">High</option>
-      <option value="Medium">Medium</option>
-      <option value="Low">Low</option>
-    </select>
+      <div class="mb-3">
+        <label for="editPriority">Priority</label>
+        <select class="form-select" id="editPriority" v-model="editingTask.priority">
+          <option value="High">High</option>
+          <option value="Medium">Medium</option>
+          <option value="Low">Low</option>
+        </select>
+      </div>
+    </template>
 
-    <br />
-
-    <button v-on:click="editTask">Update</button>
-    <button v-on:click="$emit('cancelEditing')">Cancel</button>
-  </div>
+    <template #footer>
+      <button class="btn btn-success" v-on:click="editTask">Update</button>
+    </template>
+  </MyModal>
 </template>
 
 <script>
+import MyModal from './MyModal.vue'
+
 export default {
-  props: ['task'],
+  components: { MyModal },
+  props: {
+    task: {
+      type: Object,
+      required: false,
+    },
+  },
   emits: ['cancelEditing', 'editedTask'],
   data() {
     return {
       editingTask: this.task,
+      inputError: false,
     }
   },
+  watch: {
+    task: {
+      immediate: true,
+      handler(newTask) {
+        this.editingTask = newTask ? { ...newTask } : null
+      },
+    },
+  },
   methods: {
+    hideModal() {
+      this.$refs.modal.closeModal()
+    },
+    showModal() {
+      this.inputError = false
+      this.$refs.modal.openModal()
+    },
     editTask() {
       if (this.editingTask.name.trim() && this.editingTask.dueDate) {
         this.$emit('editedTask', this.editingTask)
+        this.hideModal()
+
+        this.inputError = false
+      } else {
+        this.inputError = true
       }
     },
   },
 }
 </script>
-
-<style scoped>
-input,
-select {
-  margin-right: 7px;
-}
-
-button {
-  margin-right: 5px;
-  margin-top: 7px;
-  float: right;
-}
-
-.modal {
-  position: fixed;
-  top: 30%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  z-index: 999;
-}
-
-.overlay-modal {
-  display: block;
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  z-index: 999;
-  background: rgba(0, 0, 0, 0.5);
-}
-</style>

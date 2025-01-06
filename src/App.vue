@@ -59,10 +59,10 @@
 
         <!-- Task Editing Modal -->
         <TaskEdit
-          v-if="editingTask"
-          v-bind:task="editingTask"
+          v-if="selectedTask"
+          ref="editTaskModal"
+          v-bind:task="selectedTask"
           v-on:edited-task="updateTask"
-          v-on:cancel-editing="cancelEdit"
         />
       </main>
     </div>
@@ -79,7 +79,7 @@ export default {
   data() {
     return {
       tasks: [],
-      editingTask: null,
+      selectedTask: null,
       categoryFilter: '',
       priorityFilter: '',
       sortOrder: 'asc',
@@ -104,7 +104,6 @@ export default {
     },
     updateTask(editedTask) {
       this.tasks = this.tasks.map((task) => (task.id === editedTask.id ? { ...editedTask } : task))
-      this.editingTask = null
     },
     deleteTask(taskId) {
       this.tasks = this.tasks.filter((task) => task.id !== taskId)
@@ -129,10 +128,11 @@ export default {
       return filtered
     },
     editTask(task) {
-      this.editingTask = { ...task }
-    },
-    cancelEdit() {
-      this.editingTask = null
+      this.selectedTask = { ...task }
+
+      this.$nextTick(() => {
+        this.$refs.editTaskModal.showModal()
+      })
     },
   },
   computed: {
