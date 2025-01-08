@@ -1,5 +1,5 @@
 <template>
-  <ul>
+  <ul class="list-group">
     <TaskItem
       v-for="task in tasks"
       v-bind:key="task.id"

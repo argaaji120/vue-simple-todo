@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button class="btn btn-success" @click="showModal">Add Todo</button>
+    <button class="btn btn-success" @click="showModal"><i class="fa-solid fa-plus"></i></button>
 
     <MyModal ref="modal" modal-id="taskModal" title="Add New Task" v-on:close="handleClose">
       <template #body>
